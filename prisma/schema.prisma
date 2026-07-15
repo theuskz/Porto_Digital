@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./porto_digital.db"
+}
+
+model Usuario {
+  id      Int    @id @default(autoincrement())
+  nome    String
+  usuario String @unique(map: "sqlite_autoindex_usuarios_1")
+  senha   String
+  nivel   String
+
+  @@map("usuarios")
+}
+
+model Navio {
+  id           Int    @id @default(autoincrement())
+  nome         String
+  eh_perecivel Int
+  containers   Int
+  peso         Float
+  valor_total  Float
+
+  @@map("estoque")
+}

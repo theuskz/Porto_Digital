@@ -1,0 +1,21 @@
+# Dependências
+/node_modules
+
+# Next.js
+/.next
+/out
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.*.local
+
+# Banco SQLite
+*.db
+*.db-journal
+prisma/porto_digital.db
+prisma/porto_digital_backup.db
+
+# Sistema e editor
+.DS_Store
+.vscode
