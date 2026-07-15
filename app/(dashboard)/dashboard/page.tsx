@@ -1,54 +1,80 @@
 "use client";
 
 import KpiCard from "@/components/dashboard/kpi-card";
+import DashboardCharts from "@/components/dashboard/dashboard-charts";
+
 import { useDashboard } from "@/hooks/use-dashboard";
+import { useNavios } from "@/hooks/use-navios";
 
 export default function DashboardPage() {
+    const {
+        data: dashboard,
+        isLoading: carregandoDashboard,
+    } = useDashboard();
 
-    const { data } = useDashboard();
+    const {
+        data: navios = [],
+        isLoading: carregandoNavios,
+    } = useNavios();
 
-    if (!data) {
+    if (carregandoDashboard || carregandoNavios) {
+        return (
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+                <p className="text-slate-400">
+                    Carregando dashboard...
+                </p>
+            </div>
+        );
+    }
 
-        return <>Carregando...</>
-
+    if (!dashboard) {
+        return (
+            <div className="rounded-2xl border border-red-900 bg-red-950/30 p-6">
+                <p className="text-red-400">
+                    Não foi possível carregar os dados do dashboard.
+                </p>
+            </div>
+        );
     }
 
     return (
-
         <div className="space-y-8">
+            <header>
+                <h1 className="text-3xl font-bold tracking-tight">
+                    Dashboard
+                </h1>
 
-            <h1 className="text-3xl font-bold">
+                <p className="mt-2 text-sm text-slate-400">
+                    Visão geral das operações portuárias.
+                </p>
+            </header>
 
-                Dashboard
-
-            </h1>
-
-            <div className="grid md:grid-cols-4 gap-6">
-
+            <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                 <KpiCard
                     titulo="Navios"
-                    valor={String(data.totalNavios)}
+                    valor={String(dashboard.totalNavios)}
                 />
 
                 <KpiCard
                     titulo="Perecíveis"
-                    valor={String(data.pereciveis)}
+                    valor={String(dashboard.pereciveis)}
                 />
 
                 <KpiCard
-                    titulo="Peso Total"
-                    valor={`${data.peso.toLocaleString()} kg`}
+                    titulo="Peso total"
+                    valor={`${dashboard.peso.toLocaleString("pt-BR")} kg`}
                 />
 
                 <KpiCard
                     titulo="Faturamento"
-                    valor={`R$ ${data.faturamento.toFixed(2)}`}
+                    valor={dashboard.faturamento.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                    })}
                 />
+            </section>
 
-            </div>
-
+            <DashboardCharts navios={navios} />
         </div>
-
-    )
-
+    );
 }

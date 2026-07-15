@@ -37,17 +37,39 @@ export default function EditNavioDialog({ navio }: Props) {
                 }
             />
 
-            <DialogContent className="sm:max-w-xl">
-                <DialogHeader>
-                    <DialogTitle>
-                        Editar {navio.nome}
-                    </DialogTitle>
-                </DialogHeader>
+            <DialogContent
+                className="
+          border-slate-800
+          bg-slate-950
+          text-slate-100
+          shadow-2xl
+          sm:max-w-xl
+          sm:rounded-2xl
+          p-0
+        "
+            >
+                <div className="border-b border-slate-800 px-6 py-5">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-semibold text-slate-100">
+                            Editar embarcação
+                        </DialogTitle>
 
-                <NavioForm
-                    navio={navio}
-                    onSuccess={() => setOpen(false)}
-                />
+                        <p className="mt-1 text-sm text-slate-500">
+                            Atualize as informações operacionais de{" "}
+                            <strong className="text-slate-300">
+                                {navio.nome}
+                            </strong>
+                            .
+                        </p>
+                    </DialogHeader>
+                </div>
+
+                <div className="px-6 py-6">
+                    <NavioForm
+                        navio={navio}
+                        onSuccess={() => setOpen(false)}
+                    />
+                </div>
             </DialogContent>
         </Dialog>
     );

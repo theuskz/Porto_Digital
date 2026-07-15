@@ -35,12 +35,11 @@ export default function NavioForm({
     formState: { errors },
   } = useForm<NavioFormData>({
     resolver: zodResolver(navioSchema),
-
     defaultValues: {
       nome: navio?.nome ?? "",
       eh_perecivel: navio?.eh_perecivel ?? false,
-      containers: navio?.containers ?? 1,
-      peso: navio?.peso ?? 1,
+      containers: navio?.containers,
+      peso: navio?.peso,
     },
   });
 
@@ -48,8 +47,8 @@ export default function NavioForm({
     reset({
       nome: navio?.nome ?? "",
       eh_perecivel: navio?.eh_perecivel ?? false,
-      containers: navio?.containers ?? 1,
-      peso: navio?.peso ?? 1,
+      containers: navio?.containers,
+      peso: navio?.peso,
     });
   }, [navio, reset]);
 
@@ -72,7 +71,13 @@ export default function NavioForm({
 
     createMutation.mutate(data, {
       onSuccess() {
-        reset();
+        reset({
+          nome: "",
+          eh_perecivel: false,
+          containers: undefined,
+          peso: undefined,
+        });
+
         onSuccess?.();
       },
     });
@@ -82,6 +87,9 @@ export default function NavioForm({
     createMutation.isPending ||
     updateMutation.isPending;
 
+  const inputClassName =
+    "w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -90,7 +98,7 @@ export default function NavioForm({
       <div className="space-y-2">
         <label
           htmlFor="nome"
-          className="text-sm font-medium"
+          className="text-sm font-medium text-slate-200"
         >
           Nome da embarcação
         </label>
@@ -100,7 +108,7 @@ export default function NavioForm({
           type="text"
           placeholder="Ex: Alpha Cruiser"
           {...register("nome")}
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white outline-none focus:border-blue-500"
+          className={inputClassName}
         />
 
         {errors.nome && (
@@ -114,7 +122,7 @@ export default function NavioForm({
         <div className="space-y-2">
           <label
             htmlFor="containers"
-            className="text-sm font-medium"
+            className="text-sm font-medium text-slate-200"
           >
             Containers
           </label>
@@ -124,10 +132,11 @@ export default function NavioForm({
             type="number"
             min={1}
             step={1}
+            placeholder="Ex: 450"
             {...register("containers", {
               valueAsNumber: true,
             })}
-            className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white outline-none focus:border-blue-500"
+            className={inputClassName}
           />
 
           {errors.containers && (
@@ -140,7 +149,7 @@ export default function NavioForm({
         <div className="space-y-2">
           <label
             htmlFor="peso"
-            className="text-sm font-medium"
+            className="text-sm font-medium text-slate-200"
           >
             Peso em kg
           </label>
@@ -148,12 +157,13 @@ export default function NavioForm({
           <input
             id="peso"
             type="number"
-            min={0.1}
-            step={100}
+            min={1}
+            step={1}
+            placeholder="Ex: 69000"
             {...register("peso", {
               valueAsNumber: true,
             })}
-            className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-white outline-none focus:border-blue-500"
+            className={inputClassName}
           />
 
           {errors.peso && (
@@ -164,28 +174,34 @@ export default function NavioForm({
         </div>
       </div>
 
-      <label className="flex cursor-pointer items-center gap-3 rounded-md border border-slate-700 bg-slate-900 px-4 py-3">
+      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-4 transition hover:border-slate-600">
         <input
           type="checkbox"
           {...register("eh_perecivel")}
-          className="h-4 w-4 accent-blue-600"
+          className="h-4 w-4 rounded border-slate-600 accent-blue-600"
         />
 
         <div>
-          <p className="text-sm font-medium">
+          <p className="text-sm font-medium text-slate-200">
             Carga perecível
           </p>
 
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Aplica adicional tarifário de 15%.
           </p>
         </div>
       </label>
 
+      {errors.eh_perecivel && (
+        <p className="text-sm text-red-400">
+          {errors.eh_perecivel.message}
+        </p>
+      )}
+
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPending
           ? "Salvando..."

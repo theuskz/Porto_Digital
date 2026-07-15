@@ -66,7 +66,7 @@ export default function NaviosTable({ navios }: Props) {
           </thead>
 
           <tbody>
-            {naviosFiltrados.map((navio) => {
+            {naviosFiltrados.map((navio, index) => {
               const eficiencia =
                 navio.containers > 0
                   ? navio.peso / navio.containers
@@ -89,7 +89,7 @@ export default function NaviosTable({ navios }: Props) {
                         </p>
 
                         <p className="text-xs text-slate-500">
-                          ID #{navio.id}
+                          ID #{index + 1}
                         </p>
                       </div>
                     </div>
@@ -134,7 +134,6 @@ export default function NaviosTable({ navios }: Props) {
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <EditNavioDialog navio={navio} />
-
                       <DeleteNavioDialog navio={navio} />
                     </div>
                   </td>
