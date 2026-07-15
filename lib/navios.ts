@@ -12,14 +12,14 @@ export async function criarNavio(data: {
 }) {
   if (data.peso > 100000) {
     throw new CargaCriticaError(
-      "Peso acima do permitido."
+      "Peso acima do limite permitido de 100.000 kg."
     );
   }
 
   return prisma.navio.create({
     data: {
       nome: data.nome.trim(),
-      eh_perecivel: data.eh_perecivel ? 1 : 0,
+      eh_perecivel: data.eh_perecivel,
       containers: data.containers,
       peso: data.peso,
       valor_total: calcularTaxas(

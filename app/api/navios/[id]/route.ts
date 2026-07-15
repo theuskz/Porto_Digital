@@ -46,7 +46,7 @@ export async function PUT(
       },
       data: {
         nome: dados.nome.trim(),
-        eh_perecivel: dados.eh_perecivel ? 1 : 0,
+        eh_perecivel: dados.eh_perecivel,
         containers: dados.containers,
         peso: dados.peso,
         valor_total: calcularTaxas(
@@ -57,17 +57,9 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json({
-      ...navioAtualizado,
-      eh_perecivel: Boolean(
-        navioAtualizado.eh_perecivel
-      ),
-    });
+    return NextResponse.json(navioAtualizado);
   } catch (error) {
-    console.error(
-      "Erro ao atualizar navio:",
-      error
-    );
+    console.error("Erro ao atualizar navio:", error);
 
     return NextResponse.json(
       {
@@ -120,10 +112,7 @@ export async function DELETE(
       message: "Navio excluído com sucesso.",
     });
   } catch (error) {
-    console.error(
-      "Erro ao excluir navio:",
-      error
-    );
+    console.error("Erro ao excluir navio:", error);
 
     return NextResponse.json(
       { error: "Erro ao excluir navio." },

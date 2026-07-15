@@ -3,14 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./porto_digital.db"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
 }
 
 model Usuario {
   id      Int    @id @default(autoincrement())
   nome    String
-  usuario String @unique(map: "sqlite_autoindex_usuarios_1")
+  usuario String @unique
   senha   String
   nivel   String
 
@@ -18,12 +18,12 @@ model Usuario {
 }
 
 model Navio {
-  id           Int    @id @default(autoincrement())
-  nome         String
-  eh_perecivel Int
-  containers   Int
-  peso         Float
-  valor_total  Float
+  id            Int     @id @default(autoincrement())
+  nome          String
+  eh_perecivel  Boolean
+  containers    Int
+  peso          Float
+  valor_total   Float
 
   @@map("estoque")
 }

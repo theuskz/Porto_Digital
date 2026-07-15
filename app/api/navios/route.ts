@@ -12,11 +12,15 @@ export async function GET() {
 
     return NextResponse.json(navios);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao buscar navios:", error);
 
     return NextResponse.json(
-      { error: "Erro ao buscar navios." },
-      { status: 500 }
+      {
+        error: "Erro ao buscar navios.",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
